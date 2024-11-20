@@ -10,19 +10,16 @@
 import SwiftUI
 
 struct ContentView: View {
-    // State object to handle die model
     @State private var dieModel = DieModel()
-    // State for handling animation
     @State private var isRolling = false
+    @State private var rollHistory: [Int] = []
     
     var body: some View {
         VStack(spacing: 30) {
-            // Title
             Text("Dice Roller")
                 .font(.largeTitle)
                 .fontWeight(.bold)
             
-            // Die view
             DieView(value: dieModel.currentValue)
                 .rotation3DEffect(
                     .degrees(isRolling ? 360 : 0),
@@ -36,7 +33,6 @@ struct ContentView: View {
                     value: isRolling
                 )
             
-            // Roll button
             Button(action: rollDie) {
                 Text("Roll Die")
                     .font(.title2)
@@ -47,22 +43,50 @@ struct ContentView: View {
                     .cornerRadius(10)
             }
             .disabled(isRolling)
+            
+            if !rollHistory.isEmpty {
+                VStack(alignment: .leading) {
+                    Text("Last rolls:")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                    HStack(spacing: 8) {
+                        ForEach(rollHistory.reversed(), id: \.self) { value in
+                            Text(getDieFace(value))
+                                .font(.system(size: 30))
+                        }
+                    }
+                }
+                .padding(.top, 20)
+            }
         }
         .padding()
     }
     
-    // Function to handle die rolling with animation
     private func rollDie() {
         isRolling = true
         
-        // Delay the actual value change until animation is nearly complete
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             dieModel.roll()
+            rollHistory.append(dieModel.currentValue)
+            if rollHistory.count > 6 {
+                rollHistory.removeFirst()
+            }
         }
         
-        // Reset rolling state after animation
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             isRolling = false
+        }
+    }
+    
+    private func getDieFace(_ value: Int) -> String {
+        switch value {
+            case 1: return "⚀"
+            case 2: return "⚁"
+            case 3: return "⚂"
+            case 4: return "⚃"
+            case 5: return "⚄"
+            case 6: return "⚅"
+            default: return "?"
         }
     }
 }
