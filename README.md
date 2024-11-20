@@ -1,6 +1,6 @@
 # iOS Dice Roller App
 
-![icon](icon.png)
+<img alt="icon" src="icon.png" width="100" height="100">
 
 A simple SwiftUI-based dice rolling app featuring animated 3D dice rolls with Unicode dice face emojis (⚀⚁⚂⚃⚄⚅).
 
