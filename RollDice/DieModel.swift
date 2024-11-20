@@ -1,3 +1,11 @@
+//
+//  DieModel.swift
+//  RollDice
+//
+//  Created by Andrea Telatin (QIB) on 20/11/2024.
+//
+
+
 import Foundation
 
 struct DieModel {
